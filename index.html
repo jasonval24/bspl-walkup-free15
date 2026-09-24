@@ -2,49 +2,332 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="robots" content="noindex,nofollow" />
-  <title>Free 15-minute ride | Blue Shore Pedal Lounge</title>
+  <title>Free 15 — Blue Shore Pedal Lounge</title>
   <style>
-    body{margin:0;min-height:100dvh;display:flex;align-items:center;justify-content:center;
-      font-family:system-ui,sans-serif;background:#0b1220;color:#fff;padding:20px}
-    .card{width:100%;max-width:400px}
-    h1{font-size:1.5rem;margin:0 0 8px}
-    p{color:#c5d0e0;margin:0 0 18px}
-    label{display:block;margin:0 0 6px;font-size:.9rem}
-    input{width:100%;box-sizing:border-box;padding:14px;margin:0 0 14px;border-radius:10px;
-      border:1px solid #334;background:#111827;color:#fff;font-size:16px}
-    button{width:100%;padding:14px;border:0;border-radius:999px;font-weight:700;font-size:1rem;
-      background:#5b9cff;color:#fff;cursor:pointer}
-    #msg{margin-top:14px;display:none}
-    #msg.show{display:block}
+    :root {
+      --bg: #0b1220;
+      --card: #141e33;
+      --ink: #f4f7ff;
+      --muted: #a9b6d3;
+      --accent: #3dd6c6;
+      --accent2: #ff6b9d;
+      --border: rgba(255,255,255,0.08);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; min-height: 100%; }
+    body {
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background:
+        radial-gradient(1200px 600px at 10% -10%, rgba(61,214,198,0.18), transparent 55%),
+        radial-gradient(900px 500px at 110% 10%, rgba(255,107,157,0.16), transparent 50%),
+        var(--bg);
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px 40px;
+    }
+    .wrap { width: 100%; max-width: 440px; }
+    .badge {
+      display: inline-block;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: rgba(61,214,198,0.12);
+      border: 1px solid rgba(61,214,198,0.35);
+      border-radius: 999px;
+      padding: 6px 12px;
+      margin-bottom: 14px;
+    }
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), transparent 40%), var(--card);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 28px 22px 24px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.7rem, 6vw, 2.1rem);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+    .sub {
+      margin: 0 0 22px;
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.45;
+    }
+    label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin: 0 0 6px;
+    }
+    input {
+      width: 100%;
+      appearance: none;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,0.28);
+      color: var(--ink);
+      border-radius: 14px;
+      padding: 14px 14px;
+      font-size: 1.05rem;
+      margin-bottom: 14px;
+      outline: none;
+    }
+    input:focus {
+      border-color: rgba(61,214,198,0.7);
+      box-shadow: 0 0 0 3px rgba(61,214,198,0.18);
+    }
+    button {
+      width: 100%;
+      border: 0;
+      border-radius: 14px;
+      padding: 15px 16px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      color: #041018;
+      background: linear-gradient(135deg, var(--accent), #7cf0c4 60%, #b8ffe0);
+      margin-top: 4px;
+      transition: transform 0.12s ease, filter 0.12s ease;
+    }
+    button:active { transform: scale(0.98); }
+    button:disabled { opacity: 0.6; cursor: wait; }
+    button.secondary {
+      margin-top: 10px;
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      font-weight: 600;
+    }
+    .fine {
+      margin: 16px 0 0;
+      font-size: 0.8rem;
+      color: #7f8eae;
+      line-height: 1.4;
+      text-align: center;
+    }
+    .msg {
+      display: none;
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+    .msg.error { display: block; background: rgba(255,107,157,0.12); border: 1px solid rgba(255,107,157,0.35); color: #ffd0e0; }
+    .msg.ok { display: block; background: rgba(92,255,157,0.1); border: 1px solid rgba(92,255,157,0.35); color: #d8ffe8; }
+    .success-panel { display: none; text-align: center; padding: 12px 4px 4px; }
+    .success-panel.show { display: block; }
+    .success-panel h2 { margin: 8px 0 10px; font-size: 1.45rem; }
+    .success-panel p { color: var(--muted); margin: 0; line-height: 1.5; }
+    .party { font-size: 2rem; margin-bottom: 4px; }
+    .step.hide { display: none; }
   </style>
 </head>
 <body>
-  <main class="card">
-    <h1>Free 15-minute ride</h1>
-    <p>Enter your name and phone — it's on us.</p>
-    <form id="f">
-      <label for="name">Full name</label>
-      <input id="name" name="name" required autocomplete="name" />
-      <label for="phone">Phone number</label>
-      <input id="phone" name="phone" type="tel" required autocomplete="tel" />
-      <button type="submit">Claim my free ride</button>
-    </form>
-    <p id="msg">You're in — show staff this text.</p>
+  <main class="wrap">
+    <div class="card">
+      <span class="badge">Blue Shore Pedal Lounge · walk-up</span>
+      <h1>Free 15-minute ride</h1>
+      <p class="sub" id="subCopy">Enter your name and phone — we text you a code to claim it.</p>
+
+      <div id="step1" class="step">
+        <form id="sendForm" novalidate>
+          <label for="fullName">Full name</label>
+          <input id="fullName" name="fullName" autocomplete="name" placeholder="Your name" required />
+
+          <label for="phone">Phone</label>
+          <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(xxx) xxx-xxxx" required />
+
+          <button type="submit" id="sendBtn">Text me a code</button>
+          <div id="err1" class="msg" role="alert"></div>
+          <p class="fine">One free ride per phone. Code expires in 5 minutes. One text per day.</p>
+        </form>
+      </div>
+
+      <div id="step2" class="step hide">
+        <form id="checkForm" novalidate>
+          <label for="code">Verification code</label>
+          <input id="code" name="code" inputmode="numeric" autocomplete="one-time-code" placeholder="6-digit code" maxlength="8" required />
+
+          <button type="submit" id="checkBtn">Verify &amp; claim</button>
+          <button type="button" class="secondary" id="resendBtn">Resend code</button>
+          <div id="err2" class="msg" role="alert"></div>
+          <p class="fine" id="sentHint">We texted your phone. Enter the code to lock in your free 15.</p>
+        </form>
+      </div>
+
+      <div id="success" class="success-panel" aria-live="polite">
+        <div class="party">🎉</div>
+        <h2>You're locked in</h2>
+        <p>Check your texts — show staff the confirmation.</p>
+        <p style="margin-top:12px;color:#7f8eae;font-size:0.85rem;">Then climb aboard. We'll see you out there.</p>
+      </div>
+    </div>
   </main>
   <script>
-    const HOOK='https://hook.us2.make.com/nok2t3v9tdl8wm62awh5zhu5pugdwq8c';
-    document.getElementById('f').addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      const name=document.getElementById('name').value.trim();
-      const phone=document.getElementById('phone').value.trim();
-      try{
-        await fetch(HOOK,{method:'POST',headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({name,phone,fullName:name,source:'walk-up'})});
-      }catch(_){}
-      document.getElementById('msg').classList.add('show');
-    });
+    (function () {
+      var WEBHOOK = "https://hook.us2.make.com/nok2t3v9tdl8wm62awh5zhu5pugdwq8c";
+      var step1 = document.getElementById("step1");
+      var step2 = document.getElementById("step2");
+      var success = document.getElementById("success");
+      var sendForm = document.getElementById("sendForm");
+      var checkForm = document.getElementById("checkForm");
+      var sendBtn = document.getElementById("sendBtn");
+      var checkBtn = document.getElementById("checkBtn");
+      var resendBtn = document.getElementById("resendBtn");
+      var err1 = document.getElementById("err1");
+      var err2 = document.getElementById("err2");
+      var subCopy = document.getElementById("subCopy");
+      var state = { fullName: "", phone: "" };
+
+      var ERRORS = {
+        already_used: "This phone already claimed a free ride. Book the next one at book.bluepedallounge.com",
+        daily_limit: "We already texted this number today. Try again tomorrow.",
+        expired: "That code expired (5 minutes). Tap Resend for a new one.",
+        bad_code: "That code didn't match. Double-check and try again.",
+        send_failed: "Couldn't send the code. Try again in a sec, or ask staff.",
+        check_failed: "Couldn't verify right now. Try again, or ask staff."
+      };
+
+      function showError(el, keyOrMsg) {
+        el.className = "msg error";
+        el.textContent = ERRORS[keyOrMsg] || keyOrMsg || ERRORS.check_failed;
+      }
+      function clearError(el) {
+        el.className = "msg";
+        el.textContent = "";
+      }
+      function digits(phone) {
+        return String(phone || "").replace(/\D/g, "");
+      }
+
+      async function post(body) {
+        var res = await fetch(WEBHOOK, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        });
+        var data = {};
+        try { data = await res.json(); } catch (_) { data = {}; }
+        if (!res.ok && !data.error) {
+          throw new Error("http_" + res.status);
+        }
+        return data;
+      }
+
+      async function sendCode() {
+        clearError(err1);
+        clearError(err2);
+        state.fullName = (document.getElementById("fullName").value || "").trim();
+        state.phone = (document.getElementById("phone").value || "").trim();
+        if (!state.fullName) { showError(err1, "Drop your full name so we know who's riding."); return false; }
+        if (digits(state.phone).length < 10) {
+          showError(err1, "Need a real phone number — that's where the code goes.");
+          return false;
+        }
+        sendBtn.disabled = true;
+        resendBtn.disabled = true;
+        sendBtn.textContent = "Sending…";
+        try {
+          var data = await post({
+            action: "send",
+            fullName: state.fullName,
+            phone: state.phone,
+            source: "walk-up"
+          });
+          if (!data.ok) {
+            showError(err1, data.error || "send_failed");
+            return false;
+          }
+          step1.classList.add("hide");
+          step2.classList.remove("hide");
+          subCopy.textContent = "Enter the code we just texted you.";
+          document.getElementById("code").focus();
+          return true;
+        } catch (ex) {
+          showError(err1, "send_failed");
+          return false;
+        } finally {
+          sendBtn.disabled = false;
+          resendBtn.disabled = false;
+          sendBtn.textContent = "Text me a code";
+        }
+      }
+
+      sendForm.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        await sendCode();
+      });
+
+      resendBtn.addEventListener("click", async function () {
+        // Put values back into step1 fields if user is on step2
+        document.getElementById("fullName").value = state.fullName;
+        document.getElementById("phone").value = state.phone;
+        clearError(err2);
+        resendBtn.disabled = true;
+        resendBtn.textContent = "Sending…";
+        try {
+          var data = await post({
+            action: "send",
+            fullName: state.fullName,
+            phone: state.phone,
+            source: "walk-up"
+          });
+          if (!data.ok) {
+            showError(err2, data.error || "send_failed");
+          } else {
+            err2.className = "msg ok";
+            err2.textContent = "New code sent.";
+          }
+        } catch (ex) {
+          showError(err2, "send_failed");
+        } finally {
+          resendBtn.disabled = false;
+          resendBtn.textContent = "Resend code";
+        }
+      });
+
+      checkForm.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        clearError(err2);
+        var code = (document.getElementById("code").value || "").trim();
+        if (!code || code.replace(/\D/g, "").length < 4) {
+          showError(err2, "Enter the code from your text.");
+          return;
+        }
+        checkBtn.disabled = true;
+        checkBtn.textContent = "Verifying…";
+        try {
+          var data = await post({
+            action: "check",
+            fullName: state.fullName,
+            phone: state.phone,
+            code: code,
+            source: "walk-up"
+          });
+          if (!data.ok) {
+            showError(err2, data.error || "bad_code");
+            checkBtn.disabled = false;
+            checkBtn.textContent = "Verify & claim";
+            return;
+          }
+          step2.classList.add("hide");
+          success.classList.add("show");
+          subCopy.textContent = "You're locked in.";
+        } catch (ex) {
+          showError(err2, "check_failed");
+          checkBtn.disabled = false;
+          checkBtn.textContent = "Verify & claim";
+        }
+      });
+    })();
   </script>
 </body>
 </html>
